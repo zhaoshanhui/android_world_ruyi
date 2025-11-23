@@ -1,0 +1,3 @@
+[submodule "android_world/agents/ruyi/RuyiAgent"]
+	path = android_world/agents/ruyi/RuyiAgent
+	url = https://github.com/zhaoshanhui/RuyiAgent.git

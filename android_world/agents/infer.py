@@ -262,7 +262,12 @@ class Gpt4Wrapper(LlmWrapper, MultimodalLlmWrapper):
   ):
     if 'OPENAI_API_KEY' not in os.environ:
       raise RuntimeError('OpenAI API key not set.')
+    if 'OPENAI_API_URL' not in os.environ:
+      raise RuntimeError('OpenAI API URL not set.')
+
     self.openai_api_key = os.environ['OPENAI_API_KEY']
+    self.openai_api_url = os.environ['OPENAI_API_URL']
+
     if max_retry <= 0:
       max_retry = 3
       print('Max_retry must be positive. Reset it to 3')
@@ -314,11 +319,15 @@ class Gpt4Wrapper(LlmWrapper, MultimodalLlmWrapper):
     wait_seconds = self.RETRY_WAITING_SECONDS
     while counter > 0:
       try:
+
+        # print("payload  \n\n", payload)
         response = requests.post(
-            'https://api.openai.com/v1/chat/completions',
+            # 'https://api.openai.com/v1/chat/completions',
+            self.openai_api_url,
             headers=headers,
             json=payload,
         )
+        # print("response \n\n", response.json())
         if response.ok and 'choices' in response.json():
           return (
               response.json()['choices'][0]['message']['content'],
